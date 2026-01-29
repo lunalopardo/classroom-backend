@@ -1,7 +1,8 @@
 import express from "express";
-import {and, desc, eq, getTableColumns, ilike, or, sql} from "drizzle-orm";
-import {departments, subjects} from "../db/schema";
+import { eq, ilike, or, and, desc, sql, getTableColumns } from "drizzle-orm";
+
 import { db } from "../db";
+import { departments, subjects } from "../db/schema";
 
 const router = express.Router();
 
@@ -19,10 +20,10 @@ router.get("/", async (req, res) => {
         if (search) {
             filterConditions.push(
                 or(
-                    ilike(subjects.name, `${search}`),
-                    ilike(subjects.code, `${search}`)
+                    ilike(subjects.name, `%${search}%`),
+                    ilike(subjects.code, `%${search}%`)
                 )
-            )
+            );
         }
 
         if(department) {
@@ -33,7 +34,7 @@ router.get("/", async (req, res) => {
         const whereClause = filterConditions.length > 0 ? and(...filterConditions) : undefined;
 
         const countResult = await db
-            .select({count: sql<number> `count(*)`})
+            .select({ count: sql<number> `count(*)`})
             .from(subjects)
             .leftJoin(departments, eq(subjects.departmentId, departments.id))
             .where(whereClause);
@@ -64,6 +65,6 @@ router.get("/", async (req, res) => {
         console.error(`GET /subjects error: ${e}`);
         res.status(500).json({error: 'Failed to get subjects'});
     }
-})
+});
 
 export default router;
