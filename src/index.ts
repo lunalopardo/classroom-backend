@@ -22,7 +22,10 @@ if(!process.env.FRONTEND_URL) {
 }
 
 app.use(cors ({
-    origin: process.env.FRONTEND_URL,
+    origin: [
+        "http://localhost:5173",
+        "https://classroom-frontend-sage.vercel.app"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
