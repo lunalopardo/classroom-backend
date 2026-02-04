@@ -21,14 +21,7 @@ if(!process.env.FRONTEND_URL) {
     throw new Error("Missing FRONTEND_URL");
 }
 
-app.use(cors ({
-    origin: [
-        "http://localhost:5173",
-        "https://classroom-frontend-sage.vercel.app"
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-}));
+app.use(cors ());
 
 app.all('/api/auth/*splat', toNodeHandler(auth));
 
