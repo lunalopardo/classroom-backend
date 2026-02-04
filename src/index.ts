@@ -21,7 +21,11 @@ if(!process.env.FRONTEND_URL) {
     throw new Error("Missing FRONTEND_URL");
 }
 
-app.use(cors ());
+app.use(cors ({
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
 
 app.all('/api/auth/*splat', toNodeHandler(auth));
 
